@@ -1,0 +1,12 @@
+/workspaces/bevy_demo_2048/target/debug/deps/libloading-69769ae369fc0542.rmeta: /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/lib.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/changelog.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/os/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/os/unix/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/os/unix/consts.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/util.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/error.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/safe.rs
+
+/workspaces/bevy_demo_2048/target/debug/deps/libloading-69769ae369fc0542.d: /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/lib.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/changelog.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/os/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/os/unix/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/os/unix/consts.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/util.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/error.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/safe.rs
+
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/lib.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/changelog.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/os/mod.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/os/unix/mod.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/os/unix/consts.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/util.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/error.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/libloading-0.7.4/src/safe.rs:

@@ -1,0 +1,14 @@
+/workspaces/bevy_demo_2048/target/debug/deps/wgpu-d7aab23cc7e08537.rmeta: /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/lib.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/backend/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/backend/direct.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/belt.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/device.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/encoder.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/indirect.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/init.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/macros.rs
+
+/workspaces/bevy_demo_2048/target/debug/deps/wgpu-d7aab23cc7e08537.d: /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/lib.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/backend/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/backend/direct.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/belt.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/device.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/encoder.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/indirect.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/init.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/macros.rs
+
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/lib.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/backend/mod.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/backend/direct.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/mod.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/belt.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/device.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/encoder.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/indirect.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/util/init.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/wgpu-0.14.2/src/macros.rs:

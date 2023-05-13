@@ -1,0 +1,12 @@
+/workspaces/bevy_demo_2048/target/debug/deps/bevy_tasks-5f4b8c2b0654c28a.rmeta: /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/lib.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/slice.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/task.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/task_pool.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/usages.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/iter/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/iter/adapters.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/../README.md
+
+/workspaces/bevy_demo_2048/target/debug/deps/bevy_tasks-5f4b8c2b0654c28a.d: /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/lib.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/slice.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/task.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/task_pool.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/usages.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/iter/mod.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/iter/adapters.rs /home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/../README.md
+
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/lib.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/slice.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/task.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/task_pool.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/usages.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/iter/mod.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/iter/adapters.rs:
+/home/codespace/.cargo/registry/src/github.com-1ecc6299db9ec823/bevy_tasks-0.9.1/src/../README.md:
