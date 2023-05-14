@@ -22,7 +22,7 @@ pub static COLOR_CELL_2048: Color = Color::rgb(238.0 / 255.0, 194.0 / 255.0, 46.
 pub static COLOR_BROWN: Color = Color::rgb(120.0 / 255.0, 110.0 / 255.0, 100.0 / 255.0);
 pub static COLOR_WHITE: Color = Color::rgb(245.0 / 255.0, 250.0 / 255.0, 240.0 / 255.0);
 
-pub enum MOVE_DIRECTION {
+pub enum MoveDirection {
 	NONE,
 	UP,
 	DOWN,
@@ -31,16 +31,16 @@ pub enum MOVE_DIRECTION {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
-pub enum VICTORY_or_DEFEAT {
+pub enum VictoryOrDefeat {
 	VICTORY,
 	NONE,
 	DEFEAT
 }
 
 #[derive(Resource)]
-pub struct CELL_VALUE_SAVE {
-	pub(crate) valueSave: Vec<Vec<u32>>,
-	pub(crate) cellBackGround: Vec<HandleId>,
+pub struct CellValueSave {
+	pub(crate) value_save: Vec<Vec<u32>>,
+	pub(crate) cell_back_ground: Vec<HandleId>,
 	pub(crate) score: u32
 }
 
