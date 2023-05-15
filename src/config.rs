@@ -44,6 +44,29 @@ pub struct CellValueSave {
 	pub(crate) score: u32
 }
 
+
 #[derive(Component)]
 pub struct CellValue;
 
+pub struct MoveEvent(pub MoveDirection);
+
+pub struct DateChangeEvent;
+
+
+
+pub fn cell_color(cell_value: u32) -> bevy::render::color::Color {
+	match cell_value {
+			2 => COLOR_CELL_2.clone(),
+			4 => COLOR_CELL_4.clone(),
+			8 => COLOR_CELL_8.clone(),
+			16 => COLOR_CELL_16.clone(),
+			32 => COLOR_CELL_32.clone(),
+			64 => COLOR_CELL_64.clone(),
+			128 => COLOR_CELL_128.clone(),
+			256 => COLOR_CELL_256.clone(),
+			512 => COLOR_CELL_512.clone(),
+			1024 => COLOR_CELL_1024.clone(),
+			2048 => COLOR_CELL_2048.clone(),
+			_ => COLOR_CELL_NULL.clone(),
+	}
+}
