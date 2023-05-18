@@ -10,7 +10,6 @@
 - 基于actions自动部署到github page
 - 生成微信小程序
 - 优化代码体积
-- 升级bevy到0.10
 
 ## Web使用
 ### 安装 trunk

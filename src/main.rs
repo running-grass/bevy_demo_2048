@@ -11,40 +11,42 @@ use bevy::prelude::*;
 
 use bevy::sprite::MaterialMesh2dBundle;
 use bevy::text::Text2dBounds;
-use bevy::window::PresentMode;
+use bevy::window::{PresentMode, WindowResolution};
 
+// use bevy::render::settings::WgpuSettings;
 fn main() {
+    #[cfg(target_arch = "wasm32")]
+    console_error_panic_hook::set_once();
+
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
-            window: WindowDescriptor {
+            primary_window: Some(Window {
                 title: "Bevy 2048".to_string(),
-                position: WindowPosition::Centered,
-                width: WINDOW_WIDTH,
-                height: WINDOW_HEIGHT,
+                position: WindowPosition::Centered(MonitorSelection::Primary),
+                resolution: WindowResolution::new(WINDOW_WIDTH, WINDOW_HEIGHT),
                 present_mode: PresentMode::AutoNoVsync,
                 resizable: false,
                 ..default()
-            },
+            }),
             ..default()
         }))
         .insert_resource(ClearColor(Color::rgb(0.9, 0.9, 0.9)))
-        .add_state(VictoryOrDefeat::NONE)
-				.add_event::<MoveEvent>()
-				.add_event::<DateChangeEvent>()
-        // .add_startup_system(setup)
-        .add_system_set(SystemSet::on_enter(VictoryOrDefeat::NONE).with_system(setup))
-        .add_system_set(
-            SystemSet::on_update(VictoryOrDefeat::NONE)
-                .with_system(keyboard_input_system)
-                .with_system(move_handler_system)
-                .with_system(sync_data_to_display_system),
+        .add_state::<VictoryOrDefeat>()
+        .add_event::<MoveEvent>()
+        .add_event::<DateChangeEvent>()
+        .add_system(setup.in_schedule(OnEnter(VictoryOrDefeat::NONE)))
+        .add_system(defeat_fn.in_schedule(OnEnter(VictoryOrDefeat::DEFEAT)))
+        .add_system(victory_function.in_schedule(OnEnter(VictoryOrDefeat::VICTORY)))
+        .add_systems(
+            (
+                keyboard_input_system,
+                move_handler_system,
+                sync_data_to_display_system,
+            )
+                .in_set(OnUpdate(VictoryOrDefeat::NONE)),
         )
-        .add_system_set(SystemSet::on_enter(VictoryOrDefeat::DEFEAT).with_system(defeat_fn))
-        .add_system_set(SystemSet::on_enter(VictoryOrDefeat::VICTORY).with_system(victory_function))
-        // .add_system(keyboard_input)
         .run();
 }
-
 
 fn setup(
     mut commands: Commands,
@@ -52,13 +54,13 @@ fn setup(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    println!("setup");
     // 初始化存储数组
     let cell_value_save_temp: Vec<Vec<u32>> = init_cell_value_save();
     let mut cell_background_save: Vec<HandleId> = Vec::new();
     // 计算左上方格偏移
     let side_length: f32 =
         (WINDOW_HEIGHT - CELL_SPACE * (CELL_SIDE_NUM as f32 + 1.0)) / CELL_SIDE_NUM as f32;
+
     let mut x_offset = -(side_length + CELL_SPACE) * (CELL_SIDE_NUM as f32 / 2.0 - 0.5);
     let y_offset = (side_length + CELL_SPACE) * (CELL_SIDE_NUM as f32 / 2.0 - 0.5);
     x_offset = 2.0 * x_offset - (-1.0) * (WINDOW_WIDTH / 2.0 - CELL_SPACE) - side_length / 2.0;
@@ -113,7 +115,7 @@ fn setup(
             commands.spawn((
                 Text2dBundle {
                     text: Text::from_section(text, text_style.clone())
-                        .with_alignment(TextAlignment::CENTER),
+                        .with_alignment(TextAlignment::Center),
                     text_2d_bounds: Text2dBounds {
                         // Wrap text in the rectangle
                         size: box_size,
@@ -141,12 +143,13 @@ fn setup(
         text: Text::from_sections([
             TextSection::new("SCORE\n", text_style.clone()),
             TextSection::new("0", text_style.clone()),
-        ]),
+        ]).with_alignment(TextAlignment::Right),
         text_2d_bounds: Text2dBounds {
             // Wrap text in the rectangle
             size: box_size,
         },
-        transform: Transform::from_xyz(-WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 2.0, 0.0),
+        transform: Transform::from_xyz(-WINDOW_WIDTH / 2.0 + side_length / 1.5, WINDOW_HEIGHT / 2.0 - side_length / 2.0, 0.0),
+        // global_transform: GlobalTransform::from_xyz(0.0, 0.0, 0.0),
         ..default()
     });
 }

@@ -80,7 +80,7 @@ pub fn sync_data_to_display_system(
     mut text_query: Query<&mut Text, With<CellValue>>,
     mut score_query: Query<&mut Text, Without<CellValue>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
-    mut app_state: ResMut<State<VictoryOrDefeat>>,
+    mut app_state: ResMut<NextState<VictoryOrDefeat>>,
 ) {
     if ev_change.is_empty() {
         return;
@@ -124,16 +124,13 @@ pub fn sync_data_to_display_system(
     let result = check_result(&mut cell_value_save);
     match result {
         VictoryOrDefeat::VICTORY => {
-            println!("victory");
-            let _overwrite_set = app_state.overwrite_set(VictoryOrDefeat::VICTORY);
+            app_state.set(VictoryOrDefeat::VICTORY);
         }
         VictoryOrDefeat::DEFEAT => {
-            println!("defeat");
-            let _overwrite_set = app_state.overwrite_set(VictoryOrDefeat::DEFEAT);
+            app_state.set(VictoryOrDefeat::DEFEAT);
         }
         VictoryOrDefeat::NONE => {
-            println!("none");
-            Some(());
+            ();
         }
     };
 }
@@ -165,14 +162,10 @@ pub fn move_handler_system(
     mut ev_change: EventWriter<DateChangeEvent>,
     mut save_value: ResMut<CellValueSave>,
 ) {
-    println!("move_handler_system");
     // 判断是否要新生成 2或4 的flag
     let is_move;
     if ev_move.is_empty() {
         return;
-    }
-    if ev_move.len() > 1 {
-        println!("move_handler_system: ev_move.len() > 1");
     }
 
     for direction in ev_move.iter() {
@@ -418,7 +411,6 @@ pub fn defeat_fn(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     cell_value_save: ResMut<CellValueSave>,
-    mut _app_state: ResMut<State<VictoryOrDefeat>>,
     entities: Query<Entity, Without<Camera>>,
 ) {
     for entity_query in &entities {
@@ -435,7 +427,7 @@ pub fn defeat_fn(
     let mut text = String::from("YOU  LOST\nSCORE: ");
     text.push_str(&cell_value_save.score.to_string());
     commands.spawn(Text2dBundle {
-        text: Text::from_section(text, text_style.clone()).with_alignment(TextAlignment::CENTER),
+        text: Text::from_section(text, text_style.clone()).with_alignment(TextAlignment::Center),
         text_2d_bounds: Text2dBounds { size: box_size },
         ..default()
     });
@@ -445,7 +437,6 @@ pub fn victory_function(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     cell_value_save: ResMut<CellValueSave>,
-    _app_state: ResMut<State<VictoryOrDefeat>>,
     entities: Query<Entity, Without<Camera>>,
 ) {
     for entity_query in &entities {
@@ -462,7 +453,7 @@ pub fn victory_function(
     let mut text = String::from("WINNER\nSCORE: ");
     text.push_str(&cell_value_save.score.to_string());
     commands.spawn(Text2dBundle {
-        text: Text::from_section(text, text_style.clone()).with_alignment(TextAlignment::CENTER),
+        text: Text::from_section(text, text_style.clone()).with_alignment(TextAlignment::Center),
         text_2d_bounds: Text2dBounds { size: box_size },
         ..default()
     });

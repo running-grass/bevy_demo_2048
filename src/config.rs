@@ -30,9 +30,10 @@ pub enum MoveDirection {
 	RIGHT
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Default, States)]
 pub enum VictoryOrDefeat {
 	VICTORY,
+	#[default]
 	NONE,
 	DEFEAT
 }
