@@ -43,7 +43,7 @@ jobs:
 
       - name: Build
         run: |
-          trunk build --release
+          TRUNK_PUBLIC_URL=bevy_demo_2048 trunk build --release
       
       # - name: Package as a zip
       #   working-directory: ./dist
