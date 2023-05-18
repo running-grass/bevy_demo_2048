@@ -39,7 +39,7 @@ jobs:
           targets: wasm32-unknown-unknown
       - name: install trunk
         run: |
-          cargo install trunk
+          cargo install trunk && echo 1 || echo 0
 
       - name: Build
         run: |
