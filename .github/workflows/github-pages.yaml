@@ -11,6 +11,16 @@ jobs:
   # Build for wasm
   build:
     runs-on: ubuntu-latest
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+      contents: read
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - uses: actions/checkout@v3
@@ -35,34 +45,35 @@ jobs:
         run: |
           trunk build --release
       
-      - name: Package as a zip
-        working-directory: ./dist
-        run: |
-          zip --recurse-paths ../github-pages.zip .
+      # - name: Package as a zip
+      #   working-directory: ./dist
+      #   run: |
+      #     tar czf target.tar.gz --directory=path/to/directory .
+      #     zip --recurse-paths ../github-pages.zip .
 
-      - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          path: github-pages.zip
-          name: github-pages
+          # Upload entire repository
+          path: './dist'
+      # - name: Upload binaries to artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     path: github-pages.zip
+      #     name: github-pages
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2 # or the latest "vX.X.X" version tag for this action
   # Deploy job
   deploy:
     # Add a dependency to the build job
     needs: build
 
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
-    permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
 
-    # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2 # or the latest "vX.X.X" version tag for this action
