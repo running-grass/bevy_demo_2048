@@ -23,20 +23,29 @@ pub static COLOR_BROWN: Color = Color::rgb(120.0 / 255.0, 110.0 / 255.0, 100.0 /
 pub static COLOR_WHITE: Color = Color::rgb(245.0 / 255.0, 250.0 / 255.0, 240.0 / 255.0);
 
 pub enum MoveDirection {
-	NONE,
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT
+	None,
+	Up,
+	Down,
+	Left,
+	Right
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Default, States)]
 pub enum VictoryOrDefeat {
-	VICTORY,
+	Victory,
 	#[default]
-	NONE,
-	DEFEAT
+	None,
+	Defeat
 }
+
+
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Default, States)]
+pub enum DebugState {
+	Yes,
+	#[default]
+	No,
+}
+
 
 #[derive(Resource)]
 pub struct CellValueSave {
@@ -57,17 +66,17 @@ pub struct DateChangeEvent;
 
 pub fn cell_color(cell_value: u32) -> bevy::render::color::Color {
 	match cell_value {
-			2 => COLOR_CELL_2.clone(),
-			4 => COLOR_CELL_4.clone(),
-			8 => COLOR_CELL_8.clone(),
-			16 => COLOR_CELL_16.clone(),
-			32 => COLOR_CELL_32.clone(),
-			64 => COLOR_CELL_64.clone(),
-			128 => COLOR_CELL_128.clone(),
-			256 => COLOR_CELL_256.clone(),
-			512 => COLOR_CELL_512.clone(),
-			1024 => COLOR_CELL_1024.clone(),
-			2048 => COLOR_CELL_2048.clone(),
-			_ => COLOR_CELL_NULL.clone(),
+			2 => COLOR_CELL_2,
+			4 => COLOR_CELL_4,
+			8 => COLOR_CELL_8,
+			16 => COLOR_CELL_16,
+			32 => COLOR_CELL_32,
+			64 => COLOR_CELL_64,
+			128 => COLOR_CELL_128,
+			256 => COLOR_CELL_256,
+			512 => COLOR_CELL_512,
+			1024 => COLOR_CELL_1024,
+			2048 => COLOR_CELL_2048,
+			_ => COLOR_CELL_NULL,
 	}
 }

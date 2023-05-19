@@ -22,7 +22,7 @@ pub fn init_cell_value_save() -> Vec<Vec<u32>> {
     pos_save.remove(index);
     index = rand::thread_rng().gen_range(0..15) as usize;
     cell_value_save_temp[pos_save[index][0]][pos_save[index][1]] = 2;
-    return cell_value_save_temp;
+    cell_value_save_temp
 }
 
 // 判断游戏胜负
@@ -31,7 +31,7 @@ pub fn check_result(save_value: &mut CellValueSave) -> VictoryOrDefeat {
     for i in 0..CELL_SIDE_NUM as usize {
         for j in 0..CELL_SIDE_NUM as usize {
             if save_value.value_save[i][j] == 2048 {
-                return VictoryOrDefeat::VICTORY;
+                return VictoryOrDefeat::Victory;
             }
         }
     }
@@ -40,7 +40,7 @@ pub fn check_result(save_value: &mut CellValueSave) -> VictoryOrDefeat {
     for i in 0..CELL_SIDE_NUM as usize {
         for j in 0..CELL_SIDE_NUM as usize {
             if save_value.value_save[i][j] == 0 {
-                return VictoryOrDefeat::NONE;
+                return VictoryOrDefeat::None;
             }
         }
     }
@@ -51,25 +51,25 @@ pub fn check_result(save_value: &mut CellValueSave) -> VictoryOrDefeat {
             if save_value.value_save[i][j] == save_value.value_save[i + 1][j]
                 || save_value.value_save[i][j] == save_value.value_save[i][j + 1]
             {
-                return VictoryOrDefeat::NONE;
+                return VictoryOrDefeat::None;
             }
         }
     }
 
     // 以上都不满足，无法再移动，玩家输
-    return VictoryOrDefeat::DEFEAT;
+    VictoryOrDefeat::Defeat
 }
 
 // 判断是否有空位
-pub fn have_empty(save_value: &mut Vec<Vec<u32>>) -> bool {
-    for i in 0..CELL_SIDE_NUM as usize {
-        for j in 0..CELL_SIDE_NUM as usize {
-            if save_value[i][j] == 0 {
+pub fn have_empty(save_value: &mut [Vec<u32>]) -> bool {
+    for item in save_value.iter().take(CELL_SIDE_NUM as usize) {
+        for cell in item.iter().take(CELL_SIDE_NUM as usize) {
+            if cell == &0 {
                 return true;
             }
         }
     }
-    return false;
+    false
 }
 
 // 根据数字更新UI
@@ -86,8 +86,6 @@ pub fn sync_data_to_display_system(
         return;
     }
 
-    let mut i = 0;
-
     score_query.single_mut().sections[1].value = cell_value_save.score.to_string();
 
     let side_length: f32 =
@@ -99,7 +97,7 @@ pub fn sync_data_to_display_system(
         color: COLOR_BROWN,
     };
 
-    for mut text in text_query.iter_mut() {
+    for (i, mut text) in text_query.iter_mut().enumerate() {
         let cell_value_temp = cell_value_save.value_save[i / 4][i % 4];
 
         if cell_value_temp > 4 {
@@ -118,20 +116,17 @@ pub fn sync_data_to_display_system(
             cell_value_save.cell_back_ground[i],
             ColorMaterial::from(cell_color(cell_value_save.value_save[i / 4][i % 4])),
         );
-        i += 1;
     }
 
     let result = check_result(&mut cell_value_save);
     match result {
-        VictoryOrDefeat::VICTORY => {
-            app_state.set(VictoryOrDefeat::VICTORY);
+        VictoryOrDefeat::Victory => {
+            app_state.set(VictoryOrDefeat::Victory);
         }
-        VictoryOrDefeat::DEFEAT => {
-            app_state.set(VictoryOrDefeat::DEFEAT);
+        VictoryOrDefeat::Defeat => {
+            app_state.set(VictoryOrDefeat::Defeat);
         }
-        VictoryOrDefeat::NONE => {
-            ();
-        }
+        VictoryOrDefeat::None => {}
     };
 }
 
@@ -139,18 +134,18 @@ pub fn keyboard_input_system(
     keyboard_input: Res<Input<KeyCode>>,
     mut ev_move: EventWriter<MoveEvent>,
 ) {
-    let mut moved = MoveDirection::NONE;
+    let mut moved = MoveDirection::None;
     if keyboard_input.just_pressed(KeyCode::Up) {
-        moved = MoveDirection::UP;
+        moved = MoveDirection::Up;
     }
     if keyboard_input.just_pressed(KeyCode::Down) {
-        moved = MoveDirection::DOWN;
+        moved = MoveDirection::Down;
     }
     if keyboard_input.just_pressed(KeyCode::Right) {
-        moved = MoveDirection::RIGHT;
+        moved = MoveDirection::Right;
     }
     if keyboard_input.just_pressed(KeyCode::Left) {
-        moved = MoveDirection::LEFT;
+        moved = MoveDirection::Left;
     }
 
     println!("ev_move send");
@@ -168,13 +163,13 @@ pub fn move_handler_system(
         return;
     }
 
-    for direction in ev_move.iter() {
+    if let Some(direction) = ev_move.iter().next() {
         match direction.0 {
-            MoveDirection::NONE => return,
-            MoveDirection::RIGHT => is_move = to_right(&mut save_value),
-            MoveDirection::LEFT => is_move = to_left(&mut save_value),
-            MoveDirection::UP => is_move = to_up(&mut save_value),
-            MoveDirection::DOWN => is_move = to_down(&mut save_value),
+            MoveDirection::None => return,
+            MoveDirection::Right => is_move = to_right(&mut save_value),
+            MoveDirection::Left => is_move = to_left(&mut save_value),
+            MoveDirection::Up => is_move = to_up(&mut save_value),
+            MoveDirection::Down => is_move = to_down(&mut save_value),
         }
 
         let have_empty = have_empty(&mut save_value.value_save);
@@ -201,8 +196,6 @@ pub fn move_handler_system(
         }
 
         ev_change.send(DateChangeEvent);
-
-        return;
     }
 }
 
@@ -249,14 +242,14 @@ pub fn to_right(save_value: &mut CellValueSave) -> bool {
         }
     }
 
-    return is_move;
+    is_move
 }
 
 // 向左移动
 pub fn to_left(save_value: &mut CellValueSave) -> bool {
     let mut is_move = false;
     for i in 0..CELL_SIDE_NUM as usize {
-        for j in 0..CELL_SIDE_NUM as usize as usize {
+        for j in 0..CELL_SIDE_NUM as usize {
             if save_value.value_save[i][j] == 0 {
                 continue;
             }
@@ -295,7 +288,7 @@ pub fn to_left(save_value: &mut CellValueSave) -> bool {
         }
     }
 
-    return is_move;
+    is_move
 }
 
 // 向上移动
@@ -341,7 +334,7 @@ pub fn to_up(save_value: &mut CellValueSave) -> bool {
         }
     }
 
-    return is_move;
+    is_move
 }
 
 // 向下移动
@@ -387,23 +380,23 @@ pub fn to_down(save_value: &mut CellValueSave) -> bool {
         }
     }
 
-    return is_move;
+    is_move
 }
 
 fn cell_color(cell_value: u32) -> bevy::render::color::Color {
     match cell_value {
-        2 => COLOR_CELL_2.clone(),
-        4 => COLOR_CELL_4.clone(),
-        8 => COLOR_CELL_8.clone(),
-        16 => COLOR_CELL_16.clone(),
-        32 => COLOR_CELL_32.clone(),
-        64 => COLOR_CELL_64.clone(),
-        128 => COLOR_CELL_128.clone(),
-        256 => COLOR_CELL_256.clone(),
-        512 => COLOR_CELL_512.clone(),
-        1024 => COLOR_CELL_1024.clone(),
-        2048 => COLOR_CELL_2048.clone(),
-        _ => COLOR_CELL_NULL.clone(),
+        2 => COLOR_CELL_2,
+        4 => COLOR_CELL_4,
+        8 => COLOR_CELL_8,
+        16 => COLOR_CELL_16,
+        32 => COLOR_CELL_32,
+        64 => COLOR_CELL_64,
+        128 => COLOR_CELL_128,
+        256 => COLOR_CELL_256,
+        512 => COLOR_CELL_512,
+        1024 => COLOR_CELL_1024,
+        2048 => COLOR_CELL_2048,
+        _ => COLOR_CELL_NULL,
     }
 }
 
@@ -427,7 +420,7 @@ pub fn defeat_fn(
     let mut text = String::from("YOU  LOST\nSCORE: ");
     text.push_str(&cell_value_save.score.to_string());
     commands.spawn(Text2dBundle {
-        text: Text::from_section(text, text_style.clone()).with_alignment(TextAlignment::Center),
+        text: Text::from_section(text, text_style).with_alignment(TextAlignment::Center),
         text_2d_bounds: Text2dBounds { size: box_size },
         ..default()
     });
@@ -453,7 +446,7 @@ pub fn victory_function(
     let mut text = String::from("WINNER\nSCORE: ");
     text.push_str(&cell_value_save.score.to_string());
     commands.spawn(Text2dBundle {
-        text: Text::from_section(text, text_style.clone()).with_alignment(TextAlignment::Center),
+        text: Text::from_section(text, text_style).with_alignment(TextAlignment::Center),
         text_2d_bounds: Text2dBounds { size: box_size },
         ..default()
     });

@@ -1,5 +1,3 @@
-#![windows_subsystem = "windows"]
-
 mod config;
 use config::*;
 
@@ -9,9 +7,10 @@ use game_rule::*;
 use bevy::asset::HandleId;
 use bevy::prelude::*;
 
-use bevy::sprite::MaterialMesh2dBundle;
+use bevy::sprite::{Anchor, MaterialMesh2dBundle};
 use bevy::text::Text2dBounds;
 use bevy::window::{PresentMode, WindowResolution};
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
 // use bevy::render::settings::WgpuSettings;
 fn main() {
@@ -30,20 +29,22 @@ fn main() {
             }),
             ..default()
         }))
+        .add_plugin(WorldInspectorPlugin::new().run_if(in_state(DebugState::Yes)))
         .insert_resource(ClearColor(Color::rgb(0.9, 0.9, 0.9)))
         .add_state::<VictoryOrDefeat>()
+        .add_state::<DebugState>()
         .add_event::<MoveEvent>()
         .add_event::<DateChangeEvent>()
-        .add_system(setup.in_schedule(OnEnter(VictoryOrDefeat::NONE)))
-        .add_system(defeat_fn.in_schedule(OnEnter(VictoryOrDefeat::DEFEAT)))
-        .add_system(victory_function.in_schedule(OnEnter(VictoryOrDefeat::VICTORY)))
+        .add_system(setup.in_schedule(OnEnter(VictoryOrDefeat::None)))
+        .add_system(defeat_fn.in_schedule(OnEnter(VictoryOrDefeat::Defeat)))
+        .add_system(victory_function.in_schedule(OnEnter(VictoryOrDefeat::Victory)))
         .add_systems(
             (
                 keyboard_input_system,
                 move_handler_system,
                 sync_data_to_display_system,
             )
-                .in_set(OnUpdate(VictoryOrDefeat::NONE)),
+                .in_set(OnUpdate(VictoryOrDefeat::None)),
         )
         .run();
 }
@@ -53,7 +54,11 @@ fn setup(
     asset_server: Res<AssetServer>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
+    mut debug_state: ResMut<NextState<DebugState>>,
 ) {
+    if cfg!(debug_assertions) {
+        debug_state.set(DebugState::Yes);
+    }
     // 初始化存储数组
     let cell_value_save_temp: Vec<Vec<u32>> = init_cell_value_save();
     let mut cell_background_save: Vec<HandleId> = Vec::new();
@@ -65,16 +70,20 @@ fn setup(
     let y_offset = (side_length + CELL_SPACE) * (CELL_SIDE_NUM as f32 / 2.0 - 0.5);
     x_offset = 2.0 * x_offset - (-1.0) * (WINDOW_WIDTH / 2.0 - CELL_SPACE) - side_length / 2.0;
 
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn((Camera2dBundle::default(), Name::new("2D camera")));
 
-    commands.spawn(MaterialMesh2dBundle {
-        mesh: meshes
-            .add(shape::Box::new(WINDOW_HEIGHT, WINDOW_HEIGHT, 0.0).into())
-            .into(),
-        material: materials.add(ColorMaterial::from(COLOR_BACKGROUND)),
-        transform: Transform::from_xyz((WINDOW_WIDTH - WINDOW_HEIGHT) / 2.0, 0.0, 0.0),
-        ..default()
-    });
+    commands.spawn((
+        MaterialMesh2dBundle {
+            mesh: meshes
+                .add(shape::Box::new(WINDOW_HEIGHT, WINDOW_HEIGHT, 0.0).into())
+                .into(),
+            material: materials.add(ColorMaterial::from(COLOR_BACKGROUND)),
+            transform: Transform::from_xyz((WINDOW_WIDTH - WINDOW_HEIGHT) / 2.0, 0.0, 0.0),
+            ..default()
+        },
+        Anchor::Center,
+        Name::new("tile material"),
+    ));
 
     // 初始化文字信息
     let font = asset_server.load("fonts/FiraSans-Bold.ttf");
@@ -98,18 +107,22 @@ fn setup(
             )));
             cell_background_save.push(material_color.id());
             // 绑定格，根据数字来确定格的颜色
-            commands.spawn(MaterialMesh2dBundle {
-                mesh: meshes
-                    .add(shape::Box::new(side_length, side_length, 0.0).into())
-                    .into(),
-                material: material_color,
-                transform: Transform::from_xyz(
-                    x_offset + (j as f32) * (side_length + CELL_SPACE),
-                    y_offset - (i as f32) * (side_length + CELL_SPACE),
-                    0.0,
-                ),
-                ..default()
-            });
+            commands.spawn((
+                MaterialMesh2dBundle {
+                    mesh: meshes
+                        .add(shape::Box::new(side_length, side_length, 0.0).into())
+                        .into(),
+                    material: material_color,
+                    transform: Transform::from_xyz(
+                        x_offset + (j as f32) * (side_length + CELL_SPACE),
+                        y_offset - (i as f32) * (side_length + CELL_SPACE),
+                        0.0,
+                    ),
+                    ..default()
+                },
+                Anchor::Center,
+                Name::new(format!("tile box {} {}", i, j)),
+            ));
 
             // 绑定数字
             commands.spawn((
@@ -128,13 +141,14 @@ fn setup(
                     ..default()
                 },
                 CellValue,
+                Name::new(format!("tile text {} {}", i, j)),
             ));
         }
     }
 
     // 将存储数组设为资源
     commands.insert_resource(CellValueSave {
-        value_save: cell_value_save_temp.clone(),
+        value_save: cell_value_save_temp,
         cell_back_ground: cell_background_save,
         score: 0,
     });
@@ -142,13 +156,18 @@ fn setup(
     commands.spawn(Text2dBundle {
         text: Text::from_sections([
             TextSection::new("SCORE\n", text_style.clone()),
-            TextSection::new("0", text_style.clone()),
-        ]).with_alignment(TextAlignment::Right),
+            TextSection::new("0", text_style),
+        ])
+        .with_alignment(TextAlignment::Right),
         text_2d_bounds: Text2dBounds {
             // Wrap text in the rectangle
             size: box_size,
         },
-        transform: Transform::from_xyz(-WINDOW_WIDTH / 2.0 + side_length / 1.5, WINDOW_HEIGHT / 2.0 - side_length / 2.0, 0.0),
+        transform: Transform::from_xyz(
+            -WINDOW_WIDTH / 2.0 + side_length / 1.5,
+            WINDOW_HEIGHT / 2.0 - side_length / 2.0,
+            0.0,
+        ),
         // global_transform: GlobalTransform::from_xyz(0.0, 0.0, 0.0),
         ..default()
     });
