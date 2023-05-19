@@ -152,6 +152,53 @@ pub fn keyboard_input_system(
     ev_move.send(MoveEvent(moved));
 }
 
+// 处理触摸事件
+pub fn touch_events(
+    mut touch_evr: EventReader<TouchInput>,
+    mut start_pos: Local<Option<Vec2>>,
+    mut ev_move: EventWriter<MoveEvent>,
+
+) {
+    use bevy::input::touch::TouchPhase;
+    for ev in touch_evr.iter() {
+        // in real apps you probably want to store and track touch ids somewhere
+        match ev.phase {
+            TouchPhase::Started => {
+                *start_pos = Some(ev.position);
+            }
+            TouchPhase::Moved => {
+
+            }
+            TouchPhase::Ended => {
+                if let Some(start_pos) = *start_pos {
+                    let delta = ev.position - start_pos;
+
+                    
+                    if delta.length() > 50.0 {
+                        if delta.x.abs() > delta.y.abs() {
+                            if delta.x > 0.0 {
+                                ev_move.send(MoveEvent(MoveDirection::Right));
+                            } else {
+                                ev_move.send(MoveEvent(MoveDirection::Left));
+                            }
+                        } else {
+                            if delta.y > 0.0 {
+                                ev_move.send(MoveEvent(MoveDirection::Down));
+                            } else {
+                                ev_move.send(MoveEvent(MoveDirection::Up));
+                            }
+                        }
+                    }
+                }
+                *start_pos = None;
+            }
+            TouchPhase::Cancelled => {
+                *start_pos = None;
+            }
+        }
+    }
+}
+
 pub fn move_handler_system(
     mut ev_move: EventReader<MoveEvent>,
     mut ev_change: EventWriter<DateChangeEvent>,

@@ -7,6 +7,7 @@ use game_rule::*;
 use bevy::asset::HandleId;
 use bevy::prelude::*;
 
+use bevy::log::LogPlugin;
 use bevy::sprite::{Anchor, MaterialMesh2dBundle};
 use bevy::text::Text2dBounds;
 use bevy::window::{PresentMode, WindowResolution};
@@ -28,6 +29,9 @@ fn main() {
                 ..default()
             }),
             ..default()
+        }).set(LogPlugin {
+            level: if cfg!(debug_assertions) {  bevy::log::Level::DEBUG } else { bevy::log::Level::WARN },
+            ..default()
         }))
         .add_plugin(WorldInspectorPlugin::new().run_if(in_state(DebugState::Yes)))
         .insert_resource(ClearColor(Color::rgb(0.9, 0.9, 0.9)))
@@ -42,6 +46,7 @@ fn main() {
             (
                 keyboard_input_system,
                 move_handler_system,
+                touch_events,
                 sync_data_to_display_system,
             )
                 .in_set(OnUpdate(VictoryOrDefeat::None)),
@@ -67,7 +72,9 @@ fn setup(
         (WINDOW_HEIGHT - CELL_SPACE * (CELL_SIDE_NUM as f32 + 1.0)) / CELL_SIDE_NUM as f32;
 
     let mut x_offset = -(side_length + CELL_SPACE) * (CELL_SIDE_NUM as f32 / 2.0 - 0.5);
+
     let y_offset = (side_length + CELL_SPACE) * (CELL_SIDE_NUM as f32 / 2.0 - 0.5);
+
     x_offset = 2.0 * x_offset - (-1.0) * (WINDOW_WIDTH / 2.0 - CELL_SPACE) - side_length / 2.0;
 
     commands.spawn((Camera2dBundle::default(), Name::new("2D camera")));
