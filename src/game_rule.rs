@@ -164,14 +164,17 @@ pub fn touch_events(
         // in real apps you probably want to store and track touch ids somewhere
         match ev.phase {
             TouchPhase::Started => {
+                debug!("touch start");
                 *start_pos = Some(ev.position);
             }
             TouchPhase::Moved => {
 
             }
             TouchPhase::Ended => {
+                debug!("touch end: {:?}" , start_pos);
                 if let Some(start_pos) = *start_pos {
                     let delta = ev.position - start_pos;
+                    debug!("touch end2: {:?}, {:?}" , delta, delta.length());
 
                     
                     if delta.length() > 50.0 {
@@ -193,6 +196,7 @@ pub fn touch_events(
                 *start_pos = None;
             }
             TouchPhase::Cancelled => {
+                debug!("touch cancel");
                 *start_pos = None;
             }
         }

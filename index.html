@@ -10,8 +10,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="keywords" content="2048,game,bevy,rust">
 
-  <link data-trunk rel="copy-dir" href="/assets/">
 
+  <link data-trunk rel="copy-dir" href="/assets/">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
 </head>
+
+<body>
+  <script>
+    function scale_canvas() {
+      console.log('window load');
+
+      const windowHeight = document.body.offsetHeight;
+      const windowWidth = document.body.offsetWidth;
+
+      const canvas = document.getElementsByTagName("canvas")[0];
+      const gameHeight = canvas.offsetHeight;
+      const gameWidth = canvas.offsetWidth;
+      const scale = Math.min(windowHeight / gameHeight, windowWidth / gameWidth);
+
+      canvas.style.transform = `scale(${scale})`;
+    }
+  </script>
+</body>
 
 </html>

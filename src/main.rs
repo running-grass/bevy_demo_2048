@@ -13,26 +13,44 @@ use bevy::text::Text2dBounds;
 use bevy::window::{PresentMode, WindowResolution};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen::prelude::*;
+
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen]
+    fn scale_canvas();
+}
+
 // use bevy::render::settings::WgpuSettings;
 fn main() {
     #[cfg(target_arch = "wasm32")]
     console_error_panic_hook::set_once();
 
     App::new()
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                title: "Bevy 2048".to_string(),
-                position: WindowPosition::Centered(MonitorSelection::Primary),
-                resolution: WindowResolution::new(WINDOW_WIDTH, WINDOW_HEIGHT),
-                present_mode: PresentMode::AutoNoVsync,
-                resizable: false,
-                ..default()
-            }),
-            ..default()
-        }).set(LogPlugin {
-            level: if cfg!(debug_assertions) {  bevy::log::Level::DEBUG } else { bevy::log::Level::WARN },
-            ..default()
-        }))
+        .add_plugins(
+            DefaultPlugins
+                .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        title: "Bevy 2048".to_string(),
+                        position: WindowPosition::Centered(MonitorSelection::Primary),
+                        resolution: WindowResolution::new(WINDOW_WIDTH, WINDOW_HEIGHT),
+                        present_mode: PresentMode::AutoNoVsync,
+                        resizable: false,
+                        ..default()
+                    }),
+                    ..default()
+                })
+                .set(LogPlugin {
+                    level: if cfg!(debug_assertions) {
+                        bevy::log::Level::INFO
+                    } else {
+                        bevy::log::Level::WARN
+                    },
+                    ..default()
+                }),
+        )
         .add_plugin(WorldInspectorPlugin::new().run_if(in_state(DebugState::Yes)))
         .insert_resource(ClearColor(Color::rgb(0.9, 0.9, 0.9)))
         .add_state::<VictoryOrDefeat>()
@@ -52,6 +70,7 @@ fn main() {
                 .in_set(OnUpdate(VictoryOrDefeat::None)),
         )
         .run();
+
 }
 
 fn setup(
@@ -61,6 +80,9 @@ fn setup(
     mut materials: ResMut<Assets<ColorMaterial>>,
     mut debug_state: ResMut<NextState<DebugState>>,
 ) {
+    #[cfg(target_arch = "wasm32")]
+    scale_canvas();
+
     if cfg!(debug_assertions) {
         debug_state.set(DebugState::Yes);
     }
